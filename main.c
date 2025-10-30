@@ -86,7 +86,7 @@ int main(void) {
                     //Tokenize the string
                     token = strtok(usr_command, delimiter);
                     //separate the singular command and the args from one another
-                    int i = 0;
+                    i = 0;
                     while (token != NULL && i < 31) {
                         args[i] = token;
                         token = strtok(NULL, " ");
@@ -107,7 +107,7 @@ int main(void) {
             }
         else if (command[0] == '!' && isdigit(command[1]) )
             { // Grab the Nth command 1-10
-                char num[5];
+                char num[3];
                 num[0] = command[1];
                 if (command[2] != '\0')  // for two-digit numbers like !10
                 {
@@ -119,7 +119,7 @@ int main(void) {
                 }
 
                 int n = atoi(num);
-                if (n>=0 && n<=10){
+                if (n>0 && n<=10 && command[3] == '\0'){
                     if (recent_commands[n-1][0] != '\0') {
                         strcpy(usr_command, recent_commands[n]);
                         strcpy(raw_input, usr_command);
@@ -127,7 +127,7 @@ int main(void) {
                         //Tokenize the string
                         token = strtok(usr_command, delimiter);
                         //separate the singular command and the args from one another
-                        int i = 0;
+                        i = 0;
                         while (token != NULL && i < 31) {
                             args[i] = token;
                             token = strtok(NULL, " ");
