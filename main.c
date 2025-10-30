@@ -93,7 +93,6 @@ int main(void) {
             //Wait for child process to finish
             wait(&wait_status);
             if (wait_status == 0) {
-                printf("Child Complete");
                 for (int j = 8; j>=0; j--){
                     //Move all commands down one.
                     strcpy(recent_cmds[j+1], recent_cmds[j]);
