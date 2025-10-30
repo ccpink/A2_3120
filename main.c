@@ -59,7 +59,7 @@ int main(void) {
             exit(0);
         }
         if (strcmp(command, "history") == 0) {
-            if (recent_cmds[0][0] == '\0') {
+            if (recent_cmds[0][0] != '\0') {
                 printf("ID\tPID\tCommand\n");
                 for (int k = 0; k < 10; k++) {
                     //If there is nothing break loop as there is nothing left.
