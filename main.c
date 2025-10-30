@@ -122,7 +122,7 @@ int main(void) {
 
                 if (n>0 && n<=10){
                     if (recent_commands[n][0] != '\0') {
-
+                        //testing
                         printf("%d", n);
                         printf("%s", recent_commands[n]);
 
