@@ -150,7 +150,7 @@ int main(void) {
                     }
 
                 } else {
-                    printf("Input outside bounds!");
+                    printf("Input outside bounds!\n");
                     continue;
                 }
 
