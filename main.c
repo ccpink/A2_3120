@@ -120,7 +120,7 @@ int main(void) {
 
                 int n = atoi(num);
 
-                if (n>0 && n<=10 && command[3] == '\0'){
+                if (n>0 && n<=10){
                     if (recent_commands[n-1][0] != '\0') {
 
                         printf("%d", n);
