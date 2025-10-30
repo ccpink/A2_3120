@@ -197,7 +197,6 @@ int main(void) {
 void execute_command(char *args[]){
     if (execvp(args[0], args) == -1){
         printf("Invalid Command\n");
-        perror("execvp failed");
         exit(-1);
     }
 }
