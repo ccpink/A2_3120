@@ -147,11 +147,10 @@ int main(void) {
                         strcpy(command, args[0]);
                     }
                     else {
-                        if (recent_commands[0][0] != '\0') {
+                        if (recent_commands[0][0] == '\0') {
                             printf("No commands in history\n");
                         }else {
                             printf("Such a command is not in history\n");
-
                         }
                         continue;
                     }
