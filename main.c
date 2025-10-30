@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,14 +11,14 @@
 void execute_command(char *args[]);
 
 int main(void) {
-    int execlp_status;
     int wait_status;
     char usr_command[MAX_LINE];
     const char *delimiter= " ";
     pid_t pid;
     bool in_terminal = true;
     char *token;
-    char recent_cmds[10][128] = {0};
+    char commands_run[10][128] = {0};
+    char recent_commands[10][128] = {0};
 
     //While loop
     while (in_terminal){
@@ -36,9 +37,7 @@ int main(void) {
         //Tokenize the string
         token = strtok(usr_command, delimiter);
         //separate the singular command and the args from one another
-
         int i = 0;
-
         while (token != NULL && i < 31) {
             args[i] = token;
             token = strtok(NULL, " ");
@@ -59,20 +58,99 @@ int main(void) {
             exit(0);
         }
         if (strcmp(command, "history") == 0) {
-            if (recent_cmds[0][0] != '\0') {
+            if (commands_run[0][0] != '\0') {
                 printf("ID\tPID\tCommand\n");
                 for (int k = 0; k < 10; k++) {
                     //If there is nothing break loop as there is nothing left.
-                    if (recent_cmds[k][0] == '\0'){
+                    if (commands_run[k][0] == '\0'){
                         break;
                     }
-                    printf("%d\t%s\n",k+1, recent_cmds[k]);
+                    printf("%d\t%s\n",k+1, commands_run[k]);
                 }
 
+            } else {
+                printf("No commands in history");
             }
             //Go to next loop
             continue;
         }
+        if (strcmp(command, "!!") == 0)
+            { // Grab the most recent command
+                if (recent_commands[0][0] != '\0') {
+                    strcpy(usr_command, recent_commands[0]);
+                    strcpy(raw_input, usr_command);
+
+                    //Tokenize the string
+                    token = strtok(usr_command, delimiter);
+                    //separate the singular command and the args from one another
+                    int i = 0;
+                    while (token != NULL && i < 31) {
+                        args[i] = token;
+                        token = strtok(NULL, " ");
+                        i++;
+                    }
+                    args[i] = NULL; // null-terminate for execvp()
+                    //If there is nothing
+                    if (i == 0) {
+                        continue;
+                    }
+
+                    strcpy(command, args[0]);
+
+                }else {
+                    printf("No commands in history");
+                }
+            }
+        else if (command[0] == '!' && isdigit(command[1]) )
+            { // Grab the Nth command 1-10
+                char num[5];
+                num[0] = command[1];
+                if (command[2] != '\0')  // for two-digit numbers like !10
+                {
+                    num[1] = command[2];
+                    num[2] = '\0';
+                }
+                else {
+                    num[1] = '\0';
+                }
+
+                int n = atoi(num);
+                if (n>=0 && n<=10){
+                    if (recent_commands[n][0] != '\0') {
+                        strcpy(usr_command, recent_commands[n]);
+                        strcpy(raw_input, usr_command);
+
+                        //Tokenize the string
+                        token = strtok(usr_command, delimiter);
+                        //separate the singular command and the args from one another
+                        int i = 0;
+                        while (token != NULL && i < 31) {
+                            args[i] = token;
+                            token = strtok(NULL, " ");
+                            i++;
+                        }
+                        args[i] = NULL; // null-terminate for execvp()
+                        //If there is nothing
+                        if (i == 0) {
+                            continue;
+                        }
+
+                        strcpy(command, args[0]);
+                    }
+                    else {
+                        if (recent_commands[0][0] != '\0') {
+                            printf("No commands in history");
+                        }else {
+                            printf("Such a command is not in history");
+                        }
+                    }
+
+                } else {
+                    printf("Input outside bounds!");
+                }
+
+
+            }
 
         pid = fork();
         //Then check everything else
@@ -95,13 +173,15 @@ int main(void) {
             if (wait_status == 0) {
                 for (int j = 8; j>=0; j--){
                     //Move all commands down one.
-                    strcpy(recent_cmds[j+1], recent_cmds[j]);
+                    strcpy(commands_run[j+1], commands_run[j]);
+                    strcpy(recent_commands[j+1], recent_commands[j]);
+
                 }
                 //Put new command first slot
-                snprintf(recent_cmds[0], sizeof(recent_cmds[0]), "%lld\t%s", pid, raw_input);
+                snprintf(commands_run[0], sizeof(commands_run[0]), "%lld\t%s", pid, raw_input);
+                strcpy(recent_commands[0], raw_input);
             } else {
                 printf("There was an error");
-
             }
 
         }
@@ -111,6 +191,7 @@ int main(void) {
 
 void execute_command(char *args[]){
     if (execvp(args[0], args) == -1){
+        printf("Invalid Command\n");
         perror("execvp failed");
         exit(-1);
     }
