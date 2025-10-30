@@ -123,7 +123,7 @@ int main(void) {
                 if (n>0 && n<=10){
                     if (recent_commands[n-1][0] != '\0') {
                         //testing
-                        printf("%s", recent_commands[n-1]);
+                        printf("%s\n", recent_commands[n-1]);
 
                         strcpy(usr_command, recent_commands[n-1]);
                         strcpy(raw_input, usr_command);
