@@ -24,6 +24,7 @@ int main(void) {
         fflush(stdout);
 
         fgets(usr_command, sizeof(usr_command), stdin);
+
         usr_command[strcspn(usr_command, "\n\r")] = 0;
 
         char command[MAX_LINE];
@@ -43,6 +44,10 @@ int main(void) {
             i++;
         }
         args[i] = NULL; // null-terminate for execvp()
+        //If there is nothing
+        if (i == 0) {
+            continue;
+        }
 
         strcpy(command, args[0]);
 
@@ -53,11 +58,11 @@ int main(void) {
             exit(0);
         }
         if (strcmp(command, "history") == 0) {
-            if (recent_cmds[0][0] != '\0') {
+            if (recent_cmds[0][0] == '\0') {
                 printf("ID\tPID\tCommand\n");
                 for (int k = 0; k < 10; k++) {
                     //If there is nothing break loop as there is nothing left.
-                    if (recent_cmds[k][0] != '\0'){
+                    if (recent_cmds[k][0] == '\0'){
                         break;
                     }
                     printf("%d\t%s\n",k+1, recent_cmds[k]);
