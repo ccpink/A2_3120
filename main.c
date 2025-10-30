@@ -119,8 +119,13 @@ int main(void) {
                 }
 
                 int n = atoi(num);
+
                 if (n>0 && n<=10 && command[3] == '\0'){
                     if (recent_commands[n-1][0] != '\0') {
+
+                        printf("%d", n);
+                        printf("%s", recent_commands[n]);
+
                         strcpy(usr_command, recent_commands[n]);
                         strcpy(raw_input, usr_command);
 
