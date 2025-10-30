@@ -70,6 +70,7 @@ int main(void) {
 
             } else {
                 printf("No commands in history");
+
             }
             //Go to next loop
             continue;
@@ -99,6 +100,7 @@ int main(void) {
 
                 }else {
                     printf("No commands in history");
+                    continue;
                 }
             }
         else if (command[0] == '!' && isdigit(command[1]) )
@@ -142,11 +144,14 @@ int main(void) {
                             printf("No commands in history");
                         }else {
                             printf("Such a command is not in history");
+
                         }
+                        continue;
                     }
 
                 } else {
                     printf("Input outside bounds!");
+                    continue;
                 }
 
 
