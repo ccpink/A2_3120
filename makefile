@@ -1,2 +1,2 @@
-ASN-1: main.c
-	gcc main.c -o ASN-1
+ASN-2: main.c
+	gcc main.c -o ASN-2

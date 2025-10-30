@@ -53,10 +53,11 @@ int main(void) {
 
 
         //If it ends the program stop everything
-        if (strcmp(command, "end") == 0) {
+        if (strcmp(command, "exit") == 0) {
             //end both parent and child
             exit(0);
         }
+
         if (strcmp(command, "history") == 0) {
             if (commands_run[0][0] != '\0') {
                 printf("ID\tPID\tCommand\n");
@@ -75,6 +76,7 @@ int main(void) {
             //Go to next loop
             continue;
         }
+
         if (strcmp(command, "!!") == 0)
             { // Grab the most recent command
                 if (recent_commands[0][0] != '\0') {
@@ -118,7 +120,7 @@ int main(void) {
 
                 int n = atoi(num);
                 if (n>=0 && n<=10){
-                    if (recent_commands[n][0] != '\0') {
+                    if (recent_commands[n-1][0] != '\0') {
                         strcpy(usr_command, recent_commands[n]);
                         strcpy(raw_input, usr_command);
 
@@ -163,16 +165,16 @@ int main(void) {
         if (pid == 0) {
             //Execute Command
             execute_command(args);
-            printf("child never exited");
+            printf("Error Never Executed");
         }
         else if (pid < 0)
         {
             /* Error Occured */
-            fprintf(stderr, "Error forking\n");
+            fprintf(stderr, "Fork not executed!\n");
             exit(-1);
         }
         else
-        {
+            {
             //Wait for child process to finish
             wait(&wait_status);
             if (wait_status == 0) {
