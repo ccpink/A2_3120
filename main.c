@@ -58,10 +58,6 @@ int main(void) {
             exit(0);
         }
 
-
-        pid = fork();
-        //Then check everything else
-
         if (strcmp(command, "history") == 0) {
             if (commands_run[0][0] != '\0') {
                 printf("ID\tPID\tCommand\n");
@@ -78,7 +74,7 @@ int main(void) {
 
             }
             //Go to next loop
-            exit(1);
+            continue;
         }
 
         if (strcmp(command, "!!") == 0)
@@ -99,14 +95,14 @@ int main(void) {
                     args[i] = NULL; // null-terminate for execvp()
                     //If there is nothing
                     if (i == 0) {
-                        exit(1);
+                        continue;
                     }
 
                     strcpy(command, args[0]);
 
                 }else {
                     printf("No commands in history\n");
-                    exit(1);
+                    continue;
                 }
             }
         else if (command[0] == '!' && isdigit(command[1]) )
@@ -144,7 +140,7 @@ int main(void) {
                         args[i] = NULL; // null-terminate for execvp()
                         //If there is nothing
                         if (i == 0) {
-                            exit(1);
+                            continue;
                         }
 
                         strcpy(command, args[0]);
@@ -155,16 +151,19 @@ int main(void) {
                         }else {
                             printf("Such a command is not in history\n");
                         }
-                        exit(1);
+                        continue;
                     }
 
                 } else {
                     printf("Input outside bounds!\n");
-                    exit(1);
+                    continue;
                 }
 
 
             }
+
+        pid = fork();
+        //Then check everything else
 
         if (pid == 0) {
             //Execute Command
